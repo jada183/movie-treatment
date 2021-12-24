@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'new',
-    component: MovieDetailComponent
+    component: NewMovieComponent
   }
 ]
 
