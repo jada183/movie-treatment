@@ -1,0 +1,10 @@
+{
+    "HEADER": {
+        "TITLE": "Tratamiento de películas"
+    },
+    "SIDEBAR":{
+        "FILMS": "Películas",
+        "ACTORS": "Actores",
+        "STUDIOS": "Estudios"
+    }
+}
