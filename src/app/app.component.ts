@@ -6,9 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'movie-treatment';
 
-  public manageSideBar() {
-    // TODO
-  }
+  public fillerNav = [
+    { label: "Peliculas", route: '/movies' },
+    { label: "Actores", route: "/actors" },
+    { label: "Estudios", route: "/studios" }
+  ]
 }
