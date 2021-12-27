@@ -11,8 +11,8 @@ export class AppComponent {
     translate.setDefaultLang('es');
   }
   public fillerNav = [
-    { label: "Peliculas", route: '/movies' },
-    { label: "Actores", route: "/actors" },
-    { label: "Estudios", route: "/studios" }
+    { label: "SIDEBAR.FILMS", route: '/movies' },
+    { label: "SIDEBAR.ACTORS", route: "/actors" },
+    { label: "SIDEBAR.STUDIOS", route: "/studios" }
   ]
 }
