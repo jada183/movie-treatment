@@ -1,4 +1,15 @@
-<app-header (menuClickEvent)="manageSideBar()"></app-header>
-<div>
-  <router-outlet></router-outlet>
+<div class="body-container">
+  <app-header (menuClickEvent)="snav.toggle()"></app-header>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #snav [mode]="'side'">
+      <mat-nav-list>
+        <a mat-list-item *ngFor="let nav of fillerNav" [routerLink]="nav.route">{{nav.label}}</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>
