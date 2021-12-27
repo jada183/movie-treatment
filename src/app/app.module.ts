@@ -7,17 +7,38 @@ import { SharedModule } from './shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
+import { TranslateModule,  TranslateLoader} from '@ngx-translate/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import localeESExtra from '@angular/common/locales/extra/es';
+import localeES from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function translateLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+registerLocaleData(localeES, 'es-ES', localeESExtra);
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     SharedModule,
     MatSidenavModule,
     BrowserAnimationsModule,
-    MatListModule
+    MatListModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translateLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]
