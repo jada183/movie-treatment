@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +15,9 @@ export class SpinnerFullOverlayService {
   }
   public hide(): void {
     this.spinnerShowing.next(false);
+  }
+
+  public isShowing(): Observable<boolean> {
+    return this.spinnerShowing.asObservable();
   }
 }

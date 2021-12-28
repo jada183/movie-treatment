@@ -15,7 +15,10 @@ export class HttpCommonInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.spinnerFullOverlayService.show();
+    let cloneHeaders: HttpHeaders = req.headers;
+    if(req.headers.has('spinner')) {
+      this.spinnerFullOverlayService.show();
+    }
     const cloneReq = req.clone({});
     return next.handle(cloneReq).pipe(
       filter((res) => res !== undefined),

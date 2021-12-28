@@ -8,11 +8,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
 import { TranslateModule,  TranslateLoader} from '@ngx-translate/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import localeESExtra from '@angular/common/locales/extra/es';
 import localeES from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpCommonInterceptor } from './core/http-interceptor/http-common-interceptor';
 
 export function translateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,7 +41,13 @@ registerLocaleData(localeES, 'es-ES', localeESExtra);
       },
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCommonInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
