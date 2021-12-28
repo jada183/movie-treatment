@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LinkerService } from '../linker.service';
 import { GenericRequest } from '../models/generic-request.model';
+import { Movie } from '../models/movies/movie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,17 @@ export class MoviesService {
       {}
     );
     return this.linkService.getModel(genericRequest)
+  }
+
+  public postMovies(movie: Movie) {
+    const service = this.moviesListUrl;
+    const genericRequest = new GenericRequest(
+      Object.assign(
+        service,
+        {}),
+      {},
+      movie
+    );
+    return this.linkService.postModel(genericRequest)
   }
 }
