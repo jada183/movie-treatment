@@ -14,7 +14,7 @@ import localeES from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpCommonInterceptor } from './core/http-interceptor/http-common-interceptor';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export function translateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -32,6 +32,7 @@ registerLocaleData(localeES, 'es-ES', localeESExtra);
     SharedModule,
     MatSidenavModule,
     BrowserAnimationsModule,
+    MatProgressSpinnerModule,
     MatListModule,
     TranslateModule.forRoot({
       loader: {
