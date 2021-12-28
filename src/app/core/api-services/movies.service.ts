@@ -22,4 +22,16 @@ export class MoviesService {
     );
     return this.linkService.getModel(genericRequest)
   }
+
+  public getMovieById(id: number): Observable<any> {
+    const service = this.moviesListUrl + '/' + id;
+    const genericRequest = new GenericRequest(
+      Object.assign(
+        service,
+        {}),
+      {},
+      {}
+    );
+    return this.linkService.getModel(genericRequest)
+  }
 }
