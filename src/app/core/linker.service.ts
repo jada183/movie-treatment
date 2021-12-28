@@ -39,6 +39,18 @@ export class LinkerService {
   postModel(genericRequest: GenericRequest): Observable<Object> {
     return this.http.post<Object>(
       this.getEndPointUrl(genericRequest.getService()),
+      genericRequest.getData()
+    );
+  }
+  putModel(genericRequest: GenericRequest): Observable<Object> {
+    return this.http.put<Object>(
+      this.getEndPointUrl(genericRequest.getService()),
+      genericRequest.getData()
+    );
+  }
+  deleteModel(genericRequest: GenericRequest): Observable<Object> {
+    return this.http.delete<Object>(
+      this.getEndPointUrl(genericRequest.getService()),
       {
         observe: 'body',
         params: this.getParams(genericRequest.getParams())

@@ -36,7 +36,7 @@ export class MoviesService {
     return this.linkService.getModel(genericRequest)
   }
 
-  public postMovies(movie: Movie) {
+  public postMovie(movie: Movie) {
     const service = this.moviesListUrl;
     const genericRequest = new GenericRequest(
       Object.assign(
@@ -46,5 +46,16 @@ export class MoviesService {
       movie
     );
     return this.linkService.postModel(genericRequest)
+  }
+  public putMovie(movie: Movie, movieId: number) {
+    const service = this.moviesListUrl + '/' + movieId;
+    const genericRequest = new GenericRequest(
+      Object.assign(
+        service,
+        {}),
+      {},
+      movie
+    );
+    return this.linkService.putModel(genericRequest)
   }
 }
