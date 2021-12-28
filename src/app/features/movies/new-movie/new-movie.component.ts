@@ -25,7 +25,7 @@ export class NewMovieComponent implements OnInit {
   }
 
   private addMovie(newMovie: Movie) {
-    this.moviesService.postMovies(newMovie).subscribe(result => {
+    this.moviesService.postMovie(newMovie).subscribe(result => {
       console.log(result);
     });
   }
