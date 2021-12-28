@@ -6,9 +6,11 @@ import { HeaderComponent } from './components/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
+import { ErrorComponent } from './components/error/error.component';
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    ErrorComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { TranslateModule } from '@ngx-translate/core';
     TranslateModule
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
+    ErrorComponent
   ]
 })
 export class SharedModule { }

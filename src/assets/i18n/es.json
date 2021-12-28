@@ -6,5 +6,12 @@
         "FILMS": "Películas",
         "ACTORS": "Actores",
         "STUDIOS": "Estudios"
+    },
+    "ERROR": {
+        "MOVIE_LIST_SERVICE": "No se ha podido recuperar la lista de películas",
+        "FIND_MOVIE_BY_ID_SERVICE": "",
+        "PUT_MOVIE_SERVICE": "",
+        "REMOVE_MOVIE_SERVICE":"",
+        "ADD_MOVIE_SERVICE": ""
     }
 }

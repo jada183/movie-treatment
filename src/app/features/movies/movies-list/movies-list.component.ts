@@ -10,10 +10,13 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
 export class MoviesListComponent implements OnInit {
 
   constructor(private moviesService: MoviesService) { }
-
+  public error = false;
+  public errorMessage = 'ERROR.MOVIE_LIST_SERVICE';
   ngOnInit(): void {
     this.moviesService.getMoviesList().subscribe((movies: Array<Movie>) => {
       console.log(movies);
+    }, error => {
+      this.error = true;
     });
   }
 

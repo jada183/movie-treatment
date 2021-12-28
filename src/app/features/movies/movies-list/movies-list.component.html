@@ -1,1 +1,7 @@
-<p>movies-list works!</p>
+<div *ngIf="!error">
+    <p>movies-list works!</p>
+</div>
+<div class="error-container">
+    <app-error [message]="errorMessage" *ngIf="error"></app-error>
+</div>
+
