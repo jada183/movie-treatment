@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./error.component.scss']
 })
 export class ErrorComponent implements OnInit {
-  @Input() message: string = "MOCK";
+  @Input() message: string = "";
   constructor() { }
 
   ngOnInit(): void {
