@@ -6,7 +6,7 @@
     "start": "npm run serve",
     "serve": "concurrently \"npm:dbjson:serve\" \"npm:serve:app\"",
     "serve:app": "ng serve",
-    "dbjson:serve": "json-server --watch db.json",
+    "dbjson:serve": "json-server --watch db.json --delay 1000",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
