@@ -19,7 +19,7 @@ export class LinkerService {
   private getParams(params: any, httpParams?: HttpParams): HttpParams {
     httpParams = httpParams || new HttpParams();
     for (const property in params) {
-      if (params[property] !== null  && typeof params[property] === 'object') {
+      if (params[property] !== null && typeof params[property] === 'object') {
         this.getParams(params[property], httpParams);
       } else {
         httpParams = httpParams.append(property, params[property]);

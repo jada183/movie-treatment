@@ -1,7 +1,8 @@
 import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, filter, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
+import { HttpHeadersEnum } from '../enums/http-headers.enum';
 import { SpinnerFullOverlayService } from '../spinner-full-overlay/spinner-full-overlay.service';
 
 // XXX: declare this interceptor on main module as HTTP interceptor
@@ -16,16 +17,17 @@ export class HttpCommonInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let cloneHeaders: HttpHeaders = req.headers;
-    if(req.headers.has('spinner')) {
+    if(req.headers.has(HttpHeadersEnum.spinner)) {
       this.spinnerFullOverlayService.show();
     }
-    const cloneReq = req.clone({});
-    return next.handle(cloneReq).pipe(
-      filter((res) => res !== undefined),
+    return next.handle(req).pipe(
+      filter((res) => res.type !== 0),
       map((res) => {
-        this.spinnerFullOverlayService.hide();
+        if(req.headers.has(HttpHeadersEnum.spinner)) {
+          this.spinnerFullOverlayService.hide();
+        }
         return res;
-      })
+      }),
     );
   }
 }

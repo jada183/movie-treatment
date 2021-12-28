@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SpinnerFullOverlayService } from './core/spinner-full-overlay/spinner-full-overlay.service';
 
@@ -7,8 +7,10 @@ import { SpinnerFullOverlayService } from './core/spinner-full-overlay/spinner-f
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
-  constructor(private readonly translate: TranslateService, private spinnerFullOverlay: SpinnerFullOverlayService) {
+export class AppComponent implements OnInit, AfterViewChecked {
+  constructor(private readonly translate: TranslateService,
+    private spinnerFullOverlay: SpinnerFullOverlayService,
+    private cdRef: ChangeDetectorRef) {
     translate.setDefaultLang('es');
   }
   public showSpinner = false;
@@ -18,9 +20,12 @@ export class AppComponent implements OnInit{
     { label: "SIDEBAR.STUDIOS", route: "/studios" }
   ]
   ngOnInit() {
-    this.spinnerFullOverlay.isShowing().subscribe( showing => {
+    this.spinnerFullOverlay.isShowing().subscribe(showing => {
       console.log('showing', showing);
       this.showSpinner = showing;
-    })
+    });
+  }
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 }
