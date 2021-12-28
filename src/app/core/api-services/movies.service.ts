@@ -58,4 +58,15 @@ export class MoviesService {
     );
     return this.linkService.putModel(genericRequest)
   }
+  public deleteMovie(movieId: number) {
+    const service = this.moviesListUrl + '/' + movieId;
+    const genericRequest = new GenericRequest(
+      Object.assign(
+        service,
+        {}),
+      {},
+      {}
+    );
+    return this.linkService.deleteModel(genericRequest)
+  }
 }

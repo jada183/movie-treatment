@@ -41,4 +41,9 @@ export class MovieDetailComponent implements OnInit {
       })
     }
   }
+  private deleteMovie(movieId: number) {
+    this.moviesService.deleteMovie(movieId).subscribe(result =>  {
+      console.log('delete result:', result);
+    });
+  }
 }
