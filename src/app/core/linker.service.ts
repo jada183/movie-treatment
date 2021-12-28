@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GenericRequest } from './models/generic-request.model';
@@ -19,7 +19,7 @@ export class LinkerService {
   private getParams(params: any, httpParams?: HttpParams): HttpParams {
     httpParams = httpParams || new HttpParams();
     for (const property in params) {
-      if (params[property] !== null  && typeof params[property] === 'object') {
+      if (params[property] !== null && typeof params[property] === 'object') {
         this.getParams(params[property], httpParams);
       } else {
         httpParams = httpParams.append(property, params[property]);
@@ -31,6 +31,9 @@ export class LinkerService {
     return this.http.get<Object>(
       this.getEndPointUrl(genericRequest.getService()),
       {
+        headers: {
+          'spinner': 'enable'
+        },
         observe: 'body',
         params: this.getParams(genericRequest.getParams())
       }
@@ -39,19 +42,32 @@ export class LinkerService {
   postModel(genericRequest: GenericRequest): Observable<Object> {
     return this.http.post<Object>(
       this.getEndPointUrl(genericRequest.getService()),
-      genericRequest.getData()
+      genericRequest.getData(),
+      {
+        headers: {
+          'spinner': 'enable'
+        },
+      }
     );
   }
   putModel(genericRequest: GenericRequest): Observable<Object> {
     return this.http.put<Object>(
       this.getEndPointUrl(genericRequest.getService()),
-      genericRequest.getData()
+      genericRequest.getData(),
+      {
+        headers: {
+          'spinner': 'enable'
+        },
+      }
     );
   }
   deleteModel(genericRequest: GenericRequest): Observable<Object> {
     return this.http.delete<Object>(
       this.getEndPointUrl(genericRequest.getService()),
       {
+        headers: {
+          'spinner': 'enable'
+        },
         observe: 'body',
         params: this.getParams(genericRequest.getParams())
       }
