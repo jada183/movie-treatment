@@ -13,5 +13,10 @@
         "PUT_MOVIE_SERVICE": "",
         "REMOVE_MOVIE_SERVICE":"",
         "ADD_MOVIE_SERVICE": ""
+    },
+    "NEW": {
+        "ADD_MOVIE": "Añadir nueva película",
+        "TITLE": "Título",
+        "POSTER": "Póster(url)"
     }
 }
