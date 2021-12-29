@@ -9,10 +9,10 @@ import { GenericRequest } from '../models/generic-request.model';
 export class ActorService {
 
   constructor(private readonly linkService: LinkerService) { }
-  private moviesListUrl = 'actors';
+  private actorListUrl = 'actors';
 
   public getActorList(): Observable<any> {
-    const service = this.moviesListUrl;
+    const service = this.actorListUrl;
     const genericRequest = new GenericRequest(
       Object.assign(
         service,
