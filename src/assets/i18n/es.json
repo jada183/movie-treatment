@@ -23,6 +23,10 @@
         "RATING": "Puntuación",
         "STUDIO": "Estudio",
         "SAVE": "Guardar",
-        "CANCEL": "Cancelar"
+        "CANCEL": "Cancelar",
+        "GENDERS" :"Géneros",
+        "ADD_GENDERS": "Añade un género",
+        "ACTORS": "Actores",
+        "ADD_ACTOR" :"Añade un actor"
     }
 }
