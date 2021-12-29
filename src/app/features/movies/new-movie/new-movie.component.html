@@ -17,44 +17,45 @@
             <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
                 <mat-label>{{ 'NEW.GENDERS' | translate }}</mat-label>
                 <mat-chip-list #genderChipList>
-                  <mat-chip *ngFor="let gender of genders" [selectable]="selectable"
-                           [removable]="true" (removed)="removeGender(gender)">
-                    {{gender}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                  <input [placeholder]="'NEW.ADD_GENDERS' | translate"
-                         [matChipInputFor]="genderChipList"
-                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                         [matChipInputAddOnBlur]="true"
-                         (matChipInputTokenEnd)="addGender($event)">
+                    <mat-chip *ngFor="let gender of genders" [selectable]="selectable" [removable]="true"
+                        (removed)="removeGender(gender)">
+                        {{gender}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input [placeholder]="'NEW.ADD_GENDERS' | translate" [matChipInputFor]="genderChipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                        (matChipInputTokenEnd)="addGender($event)">
                 </mat-chip-list>
-              </mat-form-field>
-              
-              <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
-                <mat-label>{{ 'NEW.ACTORS' | translate }}</mat-label>
-                <mat-chip-list #actorChipList>
-                  <mat-chip *ngFor="let actor of actors" [selectable]="selectable"
-                           [removable]="true" (removed)="removeActor(actor)">
-                    {{actor}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                  <input [placeholder]="'NEW.ADD_ACTOR' | translate"
-                         [matChipInputFor]="actorChipList"
-                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                         [matChipInputAddOnBlur]="true"
-                         (matChipInputTokenEnd)="addActor($event)">
+            </mat-form-field>
+            <div class="col-xs-12 col-md-6 col-sm-6">
+                <mat-form-field class="w-100">
+                    <mat-label>{{ 'NEW.ACTORS' | translate }}</mat-label>
+                    <mat-select formControlName="actor">
+                        <mat-option *ngFor="let actor of actorList" [value]="actor"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (click)="addActor(actor)">
+                            {{actor.first_name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-chip-list #actorChipList class="w-100">
+                    <mat-chip *ngFor="let actor of actors" [selectable]="selectable" [removable]="true"
+                        (removed)="removeActor(actor)">
+                        {{actor.first_name}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
                 </mat-chip-list>
-              </mat-form-field>
+            </div>
+
         </div>
         <div class="row mb-3">
-            <mat-form-field  class="col-xs-12 col-md-6 col-sm-6">
+            <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
                 <mat-label>{{ 'NEW.STUDIO' | translate}}</mat-label>
-                <mat-select>
-                  <mat-option *ngFor="let studio of studios" [value]="studio" formControlName="studio">
-                    {{studio.name}}
-                  </mat-option>
+                <mat-select formControlName="studio">
+                    <mat-option *ngFor="let studio of studios" [value]="studio">
+                        {{studio.name}}
+                    </mat-option>
                 </mat-select>
-              </mat-form-field>
+            </mat-form-field>
         </div>
         <div class="row mb-3">
             <mat-form-field class="col-xs-12 col-md-4 col-sm-4">

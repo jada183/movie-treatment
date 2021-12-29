@@ -18,11 +18,18 @@ export class NewMovieComponent implements OnInit {
     imdbRating: new FormControl(''),
     studio: new FormControl(''),
     genre: new FormControl([]),
-    actors: new FormControl([])
+    actors: new FormControl([]),
+    actor: new FormControl('')
   });
-  public studios = [];
+  public studios = [
+    {name: 'prueba'}
+  ];
   public genders = [];
   public actors = [];
+
+  public actorList = [
+    {first_name: "Will Smith", id: 1},
+  ]
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   constructor(private moviesService: MoviesService) { }
 
@@ -53,17 +60,9 @@ export class NewMovieComponent implements OnInit {
       this.genders.splice(index, 1);
     }
   }
-  public removeActor(actor: any): void {
-    console.log(actor);
-    const index = this.actors.indexOf(actor);
-    if (index >= 0) {
-      this.actors.splice(index, 1);
-    }
-  }
-  addGender(event: MatChipInputEvent): void {
+  public addGender(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
     // Add gender
     if ((value || '').trim()) {
       this.genders.push( value.trim());
@@ -75,19 +74,17 @@ export class NewMovieComponent implements OnInit {
       input.value = '';
     }
   }
-  addActor(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add actor
-    if ((value || '').trim()) {
-      this.actors.push( value.trim());
+  public removeActor(actor: any): void {
+    const index = this.actors.indexOf(actor);
+    if (index >= 0) {
+      this.actors.splice(index, 1);
     }
-    // Add array value to genre formcontrol
-    this.movieForm.get('actors').setValue(this.actors);
-    // Reset the input value
-    if (input) {
-      input.value = '';
+  }
+  public addActor(actor: any): void {
+    if(this.actors.find(act =>  act.id === actor.id ) === undefined) {
+      this.actors.push(actor);
+      this.movieForm.get('actors').setValue(this.actors.map(actor => actor.id));
     }
+    this.movieForm.get('actor').setValue('');
   }
 }
