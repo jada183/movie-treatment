@@ -3,7 +3,7 @@
         <div class="row mb-3">
             <h3 class="text-center col-12">{{ 'NEW.ADD_MOVIE' | translate}}</h3>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
                 <mat-label>{{ 'NEW.TITLE' | translate }}</mat-label>
                 <input type="text" matInput formControlName="title" [placeholder]="'NEW.TITLE' | translate">
@@ -13,8 +13,30 @@
                 <input type="text" matInput formControlName="poster" [placeholder]="'NEW.POSTER' | translate">
             </mat-form-field>
         </div>
-        <div>
-            
+        <div class="row mb-3">
+            <mat-form-field  class="col-xs-12 col-md-6 col-sm-6">
+                <mat-label>{{ 'NEW.STUDIO' | translate}}</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let studio of studios" [value]="studio" formControlName="studio">
+                    {{studio.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </div>
+        <div class="row mb-3">
+            <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
+                <mat-label>{{ 'NEW.YEAR' | translate }}</mat-label>
+                <input type="text" matInput formControlName="year" [placeholder]="'NEW.YEAR' | translate">
+            </mat-form-field>
+            <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
+                <mat-label>{{ 'NEW.DURATION' | translate }}</mat-label>
+                <input type="text" matInput formControlName="duration" [placeholder]="'NEW.DURATION' | translate">
+            </mat-form-field>
+
+            <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
+                <mat-label>{{ 'NEW.RATING' | translate }}</mat-label>
+                <input type="text" matInput formControlName="imdbRating" [placeholder]="'NEW.RATING' | translate">
+            </mat-form-field>
         </div>
     </form>
 </div>

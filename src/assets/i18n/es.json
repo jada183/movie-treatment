@@ -17,6 +17,10 @@
     "NEW": {
         "ADD_MOVIE": "Añadir nueva película",
         "TITLE": "Título",
-        "POSTER": "Póster(url)"
+        "POSTER": "Póster(url)",
+        "DURATION": "Duración",
+        "YEAR": "Año",
+        "RATING": "Puntuación",
+        "STUDIO": "Estudio"
     }
 }

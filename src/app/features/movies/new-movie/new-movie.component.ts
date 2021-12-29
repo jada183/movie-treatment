@@ -13,8 +13,10 @@ export class NewMovieComponent implements OnInit {
     poster: new FormControl(''),
     year: new FormControl(''),
     duration: new FormControl(''),
-    imdbRating: new FormControl('')
+    imdbRating: new FormControl(''),
+    studio: new FormControl(''),
   });
+  public studios = [];
 
   constructor(private moviesService: MoviesService) { }
 

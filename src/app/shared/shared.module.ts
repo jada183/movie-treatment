@@ -9,6 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ErrorComponent } from './components/error/error.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -21,14 +22,16 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
     TranslateModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule,
   ],
   exports: [
     HeaderComponent,
     ErrorComponent,
     ReactiveFormsModule,
     MatInputModule,
-    TranslateModule
+    TranslateModule,
+    MatSelectModule,
   ]
 })
 export class SharedModule { }
