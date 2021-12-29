@@ -2,10 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 import { FormGroup, FormControl } from '@angular/forms';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActorService } from 'src/app/core/api-services/actor.service';
 import { Actor } from 'src/app/core/models/movies/actor.model';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { StudioService } from 'src/app/core/api-services/studio.service';
+import { Studio } from 'src/app/core/models/movies/studio.model';
 @Component({
   selector: 'app-new-movie',
   templateUrl: './new-movie.component.html',
@@ -23,26 +27,35 @@ export class NewMovieComponent implements OnInit {
     actors: new FormControl([]),
     actor: new FormControl('')
   });
-  public studios = [
-    {name: 'prueba'}
-  ];
+  public studios = [];
   public genders = [];
   public actors = [];
 
   public actorList = [];
+  public studioList = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  constructor(private moviesService: MoviesService, private actorService: ActorService) { }
+  constructor(
+    private moviesService: MoviesService, 
+    private actorService: ActorService,
+    private router: Router,
+    private studioService: StudioService ) { }
 
   ngOnInit(): void {
     this.actorService.getActorList().subscribe((actorList: Array<Actor>) => {
       this.actorList = actorList;
     });
+    forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()] ).subscribe((value: [Array<Actor>, Array<Studio>]) => {
+      const [actorList, studioList] = value;
+      this.actorList = actorList;
+      this.studios = studioList;
+    })
   }
 
   private addMovie() {
     const newMovie = this.buildMovie();
     this.moviesService.postMovie(newMovie).subscribe(result => {
-      // TODO
+      this.resetForm();
+      this.router.navigate(['/movie']);
     });
   }
   public onSubmit() {
@@ -59,7 +72,7 @@ export class NewMovieComponent implements OnInit {
     const value = event.value;
     // Add gender
     if ((value || '').trim()) {
-      this.genders.push( value.trim());
+      this.genders.push(value.trim());
     }
     // Add array value to genre formcontrol
     this.movieForm.get('genre').setValue(this.genders);
@@ -75,7 +88,7 @@ export class NewMovieComponent implements OnInit {
     }
   }
   public addActor(actor: any): void {
-    if(this.actors.find(act =>  act.id === actor.id ) === undefined) {
+    if (this.actors.find(act => act.id === actor.id) === undefined) {
       this.actors.push(actor);
       this.movieForm.get('actors').setValue(this.actors.map(actor => actor.id));
     }
@@ -91,7 +104,7 @@ export class NewMovieComponent implements OnInit {
       imdbRating: this.movieForm.get('imdbRating').value,
       actors: this.movieForm.get('actors').value
     }
-    console.log('movie',movie);
+    console.log('movie', movie);
     return movie;
   }
   public resetForm() {
