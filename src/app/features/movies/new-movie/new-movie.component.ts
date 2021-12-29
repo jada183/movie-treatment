@@ -54,8 +54,7 @@ export class NewMovieComponent implements OnInit {
   private addMovie() {
     const newMovie = this.buildMovie();
     this.moviesService.postMovie(newMovie).subscribe(result => {
-      this.resetForm();
-      this.router.navigate(['/movie']);
+      this.updateStudioInfo(result['id']);
     });
   }
   public onSubmit() {
@@ -104,7 +103,6 @@ export class NewMovieComponent implements OnInit {
       imdbRating: this.movieForm.get('imdbRating').value,
       actors: this.movieForm.get('actors').value
     }
-    console.log('movie', movie);
     return movie;
   }
   public resetForm() {
@@ -112,4 +110,12 @@ export class NewMovieComponent implements OnInit {
     this.actors = [];
     this.genders = [];
   }
-}
+  public updateStudioInfo(movieId: number) {
+    const selectedStudio = this.movieForm.get('studio').value;
+    selectedStudio.movies.push(movieId);
+    this.studioService.putStudio(selectedStudio, selectedStudio.id).subscribe(result => {
+      this.router.navigate(['/movie']);
+    });
+  }
+  
+} 
