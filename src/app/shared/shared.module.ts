@@ -10,6 +10,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -32,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     TranslateModule,
     MatSelectModule,
+    MatButtonModule
   ]
 })
 export class SharedModule { }

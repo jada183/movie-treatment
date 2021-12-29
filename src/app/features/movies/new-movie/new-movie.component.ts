@@ -38,4 +38,7 @@ export class NewMovieComponent implements OnInit {
       console.log(result);
     });
   }
+  public onSubmit() {
+    console.log(this.movieForm.value);
+  }
 }

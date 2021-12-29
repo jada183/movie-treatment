@@ -21,6 +21,8 @@
         "DURATION": "Duración",
         "YEAR": "Año",
         "RATING": "Puntuación",
-        "STUDIO": "Estudio"
+        "STUDIO": "Estudio",
+        "SAVE": "Guardar",
+        "CANCEL": "Cancelar"
     }
 }
