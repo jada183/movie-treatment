@@ -35,6 +35,9 @@ export class NewMovieComponent implements OnInit, OnDestroy {
   public studioList = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   private readonly subscriptions: Array<Subscription> = [];
+
+  public errorMessage = '';
+  public error = false;
   constructor(
     private moviesService: MoviesService,
     private actorService: ActorService,
@@ -56,6 +59,9 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.moviesService.postMovie(newMovie).subscribe(result => {
         this.updateStudioInfo(result['id']);
+      }, error => {
+        this.error = true;
+        this.errorMessage = 'ERROR.ADD_MOVIE_SERVICE';
       })
     );
   }
@@ -118,6 +124,9 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.studioService.putStudio(selectedStudio, selectedStudio.id).subscribe(result => {
         this.router.navigate(['/movie']);
+      }, error => {
+        this.error = true;
+        this.errorMessage = 'ERROR.PUT_STUDIO';
       })
     );
   }
