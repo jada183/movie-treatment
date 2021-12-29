@@ -12,7 +12,8 @@
         "FIND_MOVIE_BY_ID_SERVICE": "",
         "PUT_MOVIE_SERVICE": "",
         "REMOVE_MOVIE_SERVICE":"",
-        "ADD_MOVIE_SERVICE": ""
+        "ADD_MOVIE_SERVICE": "No se ha podido crear la película",
+        "PUT_STUDIO": "No se ha podido actualizar los datos del estudio"
     },
     "NEW": {
         "ADD_MOVIE": "Añadir nueva película",
