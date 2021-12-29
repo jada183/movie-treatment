@@ -4,6 +4,8 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { ActorService } from 'src/app/core/api-services/actor.service';
+import { Actor } from 'src/app/core/models/movies/actor.model';
 @Component({
   selector: 'app-new-movie',
   templateUrl: './new-movie.component.html',
@@ -27,23 +29,14 @@ export class NewMovieComponent implements OnInit {
   public genders = [];
   public actors = [];
 
-  public actorList = [
-    {first_name: "Will Smith", id: 1},
-  ]
+  public actorList = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  constructor(private moviesService: MoviesService) { }
+  constructor(private moviesService: MoviesService, private actorService: ActorService) { }
 
   ngOnInit(): void {
-    const movieMocked =  {
-      "title": "Dancing Lady",
-      "poster": "http://dummyimage.com/400x600.png/cc0000/ffffff",
-      "genre": ["Comedy", "Musical", "Romance"],
-      "year": 2006,
-      "duration": 161,
-      "imdbRating": 8.27,
-      "actors": [4, 5, 6]
-    };
-    // this.addMovie(movieMocked);
+    this.actorService.getActorList().subscribe((actorList: Array<Actor>) => {
+      this.actorList = actorList;
+    });
   }
 
   private addMovie(newMovie: Movie) {
