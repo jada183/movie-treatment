@@ -94,4 +94,9 @@ export class NewMovieComponent implements OnInit {
     console.log('movie',movie);
     return movie;
   }
+  public resetForm() {
+    this.movieForm.reset();
+    this.actors = [];
+    this.genders = [];
+  }
 }
