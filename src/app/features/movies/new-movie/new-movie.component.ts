@@ -39,13 +39,14 @@ export class NewMovieComponent implements OnInit {
     });
   }
 
-  private addMovie(newMovie: Movie) {
+  private addMovie() {
+    const newMovie = this.buildMovie();
     this.moviesService.postMovie(newMovie).subscribe(result => {
-      console.log(result);
+      // TODO
     });
   }
   public onSubmit() {
-    console.log(this.movieForm.value);
+    this.addMovie();
   }
   public removeGender(gender: any): void {
     const index = this.genders.indexOf(gender);
@@ -79,5 +80,18 @@ export class NewMovieComponent implements OnInit {
       this.movieForm.get('actors').setValue(this.actors.map(actor => actor.id));
     }
     this.movieForm.get('actor').setValue('');
+  }
+  public buildMovie(): Movie {
+    const movie: Movie = {
+      title: this.movieForm.get('title').value,
+      poster: this.movieForm.get('poster').value,
+      genre: this.movieForm.get('genre').value,
+      year: this.movieForm.get('year').value,
+      duration: this.movieForm.get('duration').value,
+      imdbRating: this.movieForm.get('imdbRating').value,
+      actors: this.movieForm.get('actors').value
+    }
+    console.log('movie',movie);
+    return movie;
   }
 }
