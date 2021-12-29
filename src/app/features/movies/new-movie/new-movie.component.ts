@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -7,7 +7,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ActorService } from 'src/app/core/api-services/actor.service';
 import { Actor } from 'src/app/core/models/movies/actor.model';
 import { Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { StudioService } from 'src/app/core/api-services/studio.service';
 import { Studio } from 'src/app/core/models/movies/studio.model';
 @Component({
@@ -15,7 +15,7 @@ import { Studio } from 'src/app/core/models/movies/studio.model';
   templateUrl: './new-movie.component.html',
   styleUrls: ['./new-movie.component.scss']
 })
-export class NewMovieComponent implements OnInit {
+export class NewMovieComponent implements OnInit, OnDestroy {
   movieForm = new FormGroup({
     title: new FormControl(''),
     poster: new FormControl(''),
@@ -34,28 +34,30 @@ export class NewMovieComponent implements OnInit {
   public actorList = [];
   public studioList = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  private readonly subscriptions: Array<Subscription> = [];
   constructor(
-    private moviesService: MoviesService, 
+    private moviesService: MoviesService,
     private actorService: ActorService,
     private router: Router,
-    private studioService: StudioService ) { }
+    private studioService: StudioService) { }
 
   ngOnInit(): void {
-    this.actorService.getActorList().subscribe((actorList: Array<Actor>) => {
-      this.actorList = actorList;
-    });
-    forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()] ).subscribe((value: [Array<Actor>, Array<Studio>]) => {
-      const [actorList, studioList] = value;
-      this.actorList = actorList;
-      this.studios = studioList;
-    })
+    this.subscriptions.push(
+      forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()]).subscribe((value: [Array<Actor>, Array<Studio>]) => {
+        const [actorList, studioList] = value;
+        this.actorList = actorList;
+        this.studios = studioList;
+      })
+    );
   }
 
   private addMovie() {
     const newMovie = this.buildMovie();
-    this.moviesService.postMovie(newMovie).subscribe(result => {
-      this.updateStudioInfo(result['id']);
-    });
+    this.subscriptions.push(
+      this.moviesService.postMovie(newMovie).subscribe(result => {
+        this.updateStudioInfo(result['id']);
+      })
+    );
   }
   public onSubmit() {
     this.addMovie();
@@ -113,9 +115,15 @@ export class NewMovieComponent implements OnInit {
   public updateStudioInfo(movieId: number) {
     const selectedStudio = this.movieForm.get('studio').value;
     selectedStudio.movies.push(movieId);
-    this.studioService.putStudio(selectedStudio, selectedStudio.id).subscribe(result => {
-      this.router.navigate(['/movie']);
-    });
+    this.subscriptions.push(
+      this.studioService.putStudio(selectedStudio, selectedStudio.id).subscribe(result => {
+        this.router.navigate(['/movie']);
+      })
+    );
   }
-  
+  ngOnDestroy() {
+    for (const subs of this.subscriptions) {
+      subs.unsubscribe();
+    }
+  }
 } 
