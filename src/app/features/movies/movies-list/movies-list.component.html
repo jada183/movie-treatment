@@ -1,5 +1,10 @@
 <div *ngIf="!error">
-    <p>movies-list works!</p>
+    <div class="container mt-5">
+        <div *ngFor="let movie of movieList" class="mb-3">
+            <app-movie-box [movie]="movie"></app-movie-box>
+        </div>
+ 
+    </div>
 </div>
 <div class="error-container" *ngIf="error">
     <app-error [message]="errorMessage"></app-error>
