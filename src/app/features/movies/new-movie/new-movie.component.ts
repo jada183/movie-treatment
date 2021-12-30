@@ -146,12 +146,14 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     this.movieFormStore.setMovieForm(this.movieForm.value);
   }
   private recoverForm() {
-    this.movieFormQuery.getMovieForm$.subscribe(result => {
-      this.movieForm.setValue(result);
-      this.loadActorsChips();
-      this.setStudio();
-      this.setGenreList();
-    });
+    this.subscriptions.push(
+      this.movieFormQuery.getMovieForm$.subscribe(result => {
+        this.movieForm.setValue(result);
+        this.loadActorsChips();
+        this.setStudio();
+        this.setGenreList();
+      })
+    );
   }
   private loadActorsChips() {
     const movieActorIds: [] = this.movieForm.get('actors').value;
