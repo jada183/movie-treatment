@@ -6,9 +6,9 @@
         <div class="mb-1">
             <img [src]="movie.poster" width="100%"class="image"/>
         </div>
-        <div class="d-flex">
-            <div *ngFor="let genre of movie.genre">
-               <b class="mr-2"> #{{ genre }}</b> 
+        <div class="row">
+            <div *ngFor="let genre of movie.genre" class="col-auto">
+               <b> #{{ genre }}</b> 
             </div>
         </div>
     </div>
