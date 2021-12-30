@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { StudioService } from 'src/app/core/api-services/studio.service';
 import { Studio } from 'src/app/core/models/movies/studio.model';
+import { MovieFQuery, MovieFormStore } from 'src/app/core/akita/movieForm.store';
+import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-new-movie',
   templateUrl: './new-movie.component.html',
@@ -23,7 +25,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     duration: new FormControl('', [Validators.required, Validators.min(1), Validators.max(1000)]),
     imdbRating: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10)]),
     studio: new FormControl('', [Validators.required]),
-    genre: new FormControl([], [Validators.required]),
+    genre: new FormControl([]),
     actors: new FormControl([]),
     actor: new FormControl('')
   });
@@ -32,7 +34,6 @@ export class NewMovieComponent implements OnInit, OnDestroy {
   public actors = [];
 
   public actorList = [];
-  public studioList = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   private readonly subscriptions: Array<Subscription> = [];
 
@@ -42,14 +43,20 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     private moviesService: MoviesService,
     private actorService: ActorService,
     private router: Router,
-    private studioService: StudioService) { }
+    private studioService: StudioService,
+    private movieFormQuery: MovieFQuery,
+    private movieFormStore: MovieFormStore) { }
 
   ngOnInit(): void {
+    this.movieForm.valueChanges.subscribe(() => {
+      this.saveFormInAkita();
+    });
     this.subscriptions.push(
       forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()]).subscribe((value: [Array<Actor>, Array<Studio>]) => {
         const [actorList, studioList] = value;
         this.actorList = actorList;
         this.studios = studioList;
+        this.recoverForm();
       })
     );
   }
@@ -73,6 +80,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     if (index >= 0) {
       this.genders.splice(index, 1);
     }
+    this.movieForm.get('genre').setValue(this.genders);
   }
   public addGender(event: MatChipInputEvent): void {
     const input = event.input;
@@ -93,6 +101,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     if (index >= 0) {
       this.actors.splice(index, 1);
     }
+    this.movieForm.get('actors').setValue(this.actors.map(actor => actor.id));
   }
   public addActor(actor: any): void {
     if (this.actors.find(act => act.id === actor.id) === undefined) {
@@ -114,6 +123,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     return movie;
   }
   public resetForm() {
+    this.movieFormStore.resetMovieForm();
     this.movieForm.reset();
     this.actors = [];
     this.genders = [];
@@ -123,6 +133,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     selectedStudio.movies.push(movieId);
     this.subscriptions.push(
       this.studioService.putStudio(selectedStudio, selectedStudio.id).subscribe(result => {
+        this.resetForm();
         this.router.navigate(['/movie']);
       }, error => {
         this.error = true;
@@ -133,6 +144,43 @@ export class NewMovieComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     for (const subs of this.subscriptions) {
       subs.unsubscribe();
+    }
+  }
+  private saveFormInAkita() {
+    this.movieFormStore.setMovieForm(this.movieForm.value);
+  }
+  private recoverForm() {
+    this.subscriptions.push(
+      this.movieFormQuery.getMovieForm$.pipe(first()
+       ).subscribe(result => {
+        this.movieForm.setValue(result);
+        this.loadActorsChips();
+        this.setStudio();
+        this.setGenreList();
+      })
+    );
+  }
+  private loadActorsChips() {
+    const movieActorIds: [] = this.movieForm.get('actors').value;
+    if (movieActorIds !== null && movieActorIds.length > 0) {
+      this.actorList.forEach(actor => {
+        if (movieActorIds.find(id => id === actor.id)) {
+          this.actors.push(actor);
+        }
+      });
+    }
+  }
+  private setStudio() {
+    if (this.movieForm.get('studio').value) {
+      const selectedStudio = this.movieForm.get('studio').value;
+      const studioToSet = this.studios.find(st => st.id === selectedStudio.id);
+      this.movieForm.get('studio').setValue(studioToSet);
+    }
+
+  }
+  private setGenreList() {
+    if(this.movieForm.get('genre').value) {
+      this.genders = [...this.movieForm.get('genre').value];
     }
   }
 } 
