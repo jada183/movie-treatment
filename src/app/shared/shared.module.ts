@@ -7,6 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { ErrorComponent } from './components/error/error.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -17,11 +21,22 @@ import { ErrorComponent } from './components/error/error.component';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    TranslateModule
+    TranslateModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatChipsModule
   ],
   exports: [
     HeaderComponent,
-    ErrorComponent
+    ErrorComponent,
+    ReactiveFormsModule,
+    MatInputModule,
+    TranslateModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatIconModule
   ]
 })
 export class SharedModule { }
