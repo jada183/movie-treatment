@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { StudioService } from 'src/app/core/api-services/studio.service';
 import { Studio } from 'src/app/core/models/movies/studio.model';
 import { MovieFQuery, MovieFormStore } from 'src/app/core/akita/movieForm.store';
+import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-new-movie',
   templateUrl: './new-movie.component.html',
@@ -47,6 +48,9 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     private movieFormStore: MovieFormStore) { }
 
   ngOnInit(): void {
+    this.movieForm.valueChanges.subscribe(() => {
+      this.saveFormInAkita();
+    });
     this.subscriptions.push(
       forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()]).subscribe((value: [Array<Actor>, Array<Studio>]) => {
         const [actorList, studioList] = value;
@@ -76,6 +80,7 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     if (index >= 0) {
       this.genders.splice(index, 1);
     }
+    this.movieForm.get('genre').setValue(this.genders);
   }
   public addGender(event: MatChipInputEvent): void {
     const input = event.input;
@@ -137,7 +142,6 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     );
   }
   ngOnDestroy() {
-    this.saveFormInAkita();
     for (const subs of this.subscriptions) {
       subs.unsubscribe();
     }
@@ -147,7 +151,8 @@ export class NewMovieComponent implements OnInit, OnDestroy {
   }
   private recoverForm() {
     this.subscriptions.push(
-      this.movieFormQuery.getMovieForm$.subscribe(result => {
+      this.movieFormQuery.getMovieForm$.pipe(first()
+       ).subscribe(result => {
         this.movieForm.setValue(result);
         this.loadActorsChips();
         this.setStudio();
