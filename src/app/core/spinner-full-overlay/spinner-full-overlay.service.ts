@@ -7,14 +7,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SpinnerFullOverlayService {
 
   private readonly spinnerShowing: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+  private spinnerCounter = 0;
   constructor() { }
 
   public show(): void {
-    this.spinnerShowing.next(true);
+    this.spinnerCounter++;
+    this.spinnerShowing.next(true);    
   }
   public hide(): void {
-    this.spinnerShowing.next(false);
+    this.spinnerCounter--;
+    if(this.spinnerCounter <= 0) {
+      this.spinnerCounter = 0;
+      this.spinnerShowing.next(false);
+    }
   }
 
   public isShowing(): Observable<boolean> {
