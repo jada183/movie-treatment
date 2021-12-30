@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActorService } from 'src/app/core/api-services/actor.service';
@@ -17,13 +17,13 @@ import { Studio } from 'src/app/core/models/movies/studio.model';
 })
 export class NewMovieComponent implements OnInit, OnDestroy {
   movieForm = new FormGroup({
-    title: new FormControl(''),
-    poster: new FormControl(''),
-    year: new FormControl(''),
-    duration: new FormControl(''),
-    imdbRating: new FormControl(''),
-    studio: new FormControl(''),
-    genre: new FormControl([]),
+    title: new FormControl('', Validators.required),
+    poster: new FormControl('', Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')),
+    year: new FormControl('', [Validators.required, Validators.min(1850), Validators.max(2100)]),
+    duration: new FormControl('', [Validators.required, Validators.min(1), Validators.max(1000)]),
+    imdbRating: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10)]),
+    studio: new FormControl('', [Validators.required]),
+    genre: new FormControl([], [Validators.required]),
     actors: new FormControl([]),
     actor: new FormControl('')
   });

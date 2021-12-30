@@ -9,11 +9,17 @@
         <div class="row mb-3">
             <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
                 <mat-label>{{ 'NEW.TITLE' | translate }}</mat-label>
-                <input type="text" matInput formControlName="title" [placeholder]="'NEW.TITLE' | translate">
+                <input type="text" matInput formControlName="title" [placeholder]="'NEW.TITLE' | translate" maxlength="100">
+                <mat-error *ngIf="movieForm.get('title').hasError('required')">
+                  {{ 'NEW.VALIDATIONS.REQUIRED' | translate }}
+                </mat-error>
             </mat-form-field>
             <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
                 <mat-label>{{ 'NEW.POSTER' | translate }}</mat-label>
                 <input type="text" matInput formControlName="poster" [placeholder]="'NEW.POSTER' | translate">
+                <mat-error *ngIf="movieForm.get('poster').hasError('pattern')">
+                    {{ 'NEW.VALIDATIONS.POST_PATTERN' | translate }}
+                  </mat-error>
             </mat-form-field>
         </div>
         <div class="row mb-3">
@@ -27,7 +33,7 @@
                     </mat-chip>
                     <input [placeholder]="'NEW.ADD_GENDERS' | translate" [matChipInputFor]="genderChipList"
                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                        (matChipInputTokenEnd)="addGender($event)">
+                        (matChipInputTokenEnd)="addGender($event)" maxlength="30">
                 </mat-chip-list>
             </mat-form-field>
             <div class="col-xs-12 col-md-6 col-sm-6">
@@ -48,7 +54,6 @@
                     </mat-chip>
                 </mat-chip-list>
             </div>
-
         </div>
         <div class="row mb-3">
             <mat-form-field class="col-xs-12 col-md-6 col-sm-6">
@@ -58,26 +63,56 @@
                         {{studio.name}}
                     </mat-option>
                 </mat-select>
+                <mat-error *ngIf="movieForm.get('studio').hasError('required')">
+                    {{ 'NEW.VALIDATIONS.REQUIRED' | translate }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="row mb-3">
             <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
                 <mat-label>{{ 'NEW.YEAR' | translate }}</mat-label>
-                <input type="number" matInput formControlName="year" [placeholder]="'NEW.YEAR' | translate">
+                <input type="number" matInput formControlName="year"  [placeholder]="'NEW.YEAR' | translate">
+                <mat-error *ngIf="movieForm.get('year').hasError('min')">
+                   {{ 'NEW.VALIDATIONS.YEAR_MIN' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="movieForm.get('year').hasError('max')">
+                    {{ 'NEW.VALIDATIONS.YEAR_MAX' | translate }}
+                   </mat-error>
+                   <mat-error *ngIf="movieForm.get('year').hasError('required')">
+                    {{ 'NEW.VALIDATIONS.REQUIRED' | translate }}
+                  </mat-error>
             </mat-form-field>
             <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
                 <mat-label>{{ 'NEW.DURATION' | translate }}</mat-label>
-                <input type="number" matInput formControlName="duration" [placeholder]="'NEW.DURATION' | translate">
+                <input type="number" matInput formControlName="duration" [placeholder]="'NEW.DURATION_PLACEHOLDER' | translate">
+                <mat-error *ngIf="movieForm.get('duration').hasError('min')">
+                    {{ 'NEW.VALIDATIONS.DURATION_MIN' | translate }}
+                   </mat-error>
+                   <mat-error *ngIf="movieForm.get('duration').hasError('max')">
+                     {{ 'NEW.VALIDATIONS.DURATION_MAX' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="movieForm.get('duration').hasError('required')">
+                     {{ 'NEW.VALIDATIONS.REQUIRED' | translate }}
+                   </mat-error>
             </mat-form-field>
 
             <mat-form-field class="col-xs-12 col-md-4 col-sm-4">
                 <mat-label>{{ 'NEW.RATING' | translate }}</mat-label>
                 <input type="number" matInput formControlName="imdbRating" [placeholder]="'NEW.RATING' | translate">
+                <mat-error *ngIf="movieForm.get('imdbRating').hasError('min')">
+                    {{ 'NEW.VALIDATIONS.RATING_LIMITS' | translate }}
+                   </mat-error>
+                   <mat-error *ngIf="movieForm.get('imdbRating').hasError('max')">
+                     {{ 'NEW.VALIDATIONS.RATING_LIMITS' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="movieForm.get('imdbRating').hasError('required')">
+                     {{ 'NEW.VALIDATIONS.REQUIRED' | translate }}
+                   </mat-error>
             </mat-form-field>
         </div>
         <div class="d-flex justify-content-end">
             <button type="button" mat-raised-button color="accent" class="mr-2" (click)="resetForm()">{{'NEW.CANCEL' | translate}}</button>
-            <button type="submit" mat-raised-button color="primary">{{ 'NEW.SAVE' | translate}}</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="movieForm.invalid">{{ 'NEW.SAVE' | translate}}</button>
         </div>
     </form>
 </div>

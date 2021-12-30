@@ -20,6 +20,7 @@
         "TITLE": "Título",
         "POSTER": "Póster(url)",
         "DURATION": "Duración",
+        "DURATION_PLACEHOLDER":"Duración en minutos",
         "YEAR": "Año",
         "RATING": "Puntuación",
         "STUDIO": "Estudio",
@@ -28,6 +29,15 @@
         "GENDERS" :"Géneros",
         "ADD_GENDERS": "Añade un género",
         "ACTORS": "Actores",
-        "ADD_ACTOR" :"Añade un actor"
+        "ADD_ACTOR" :"Añade un actor",
+        "VALIDATIONS": {
+            "REQUIRED": "El campo es requerido",
+            "YEAR_MIN": "El año ha de ser igual o superior a 1850",
+            "YEAR_MAX": "El año no puede superar el 2100",
+            "DURATION_MIN": "La duración mínima de la película es de 1 minuto",
+            "DURATION_MAX": "La duración máxima de la película es de 1000 minuto",
+            "RATING_LIMITS": "La puntuación ha de estar entre 0 y 10",
+            "POST_PATTERN": "El formato debe ser URL"
+        }
     }
 }
