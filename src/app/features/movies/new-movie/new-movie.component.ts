@@ -18,7 +18,7 @@ import { Studio } from 'src/app/core/models/movies/studio.model';
 export class NewMovieComponent implements OnInit, OnDestroy {
   movieForm = new FormGroup({
     title: new FormControl('', Validators.required),
-    poster: new FormControl('', Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')),
+    poster: new FormControl('', Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[-a-zA-Z0-9@:%_\+.~#?&//=]*/?')),
     year: new FormControl('', [Validators.required, Validators.min(1850), Validators.max(2100)]),
     duration: new FormControl('', [Validators.required, Validators.min(1), Validators.max(1000)]),
     imdbRating: new FormControl('', [Validators.required, Validators.min(0), Validators.max(10)]),
