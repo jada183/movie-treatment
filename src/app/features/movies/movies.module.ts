@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'new',
     component: NewMovieComponent
+  },
+  { 
+    path: 'edit/:id',
+    component: NewMovieComponent
   }
 ]
 

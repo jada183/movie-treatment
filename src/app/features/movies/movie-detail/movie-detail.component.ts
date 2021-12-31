@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ActorService } from 'src/app/core/api-services/actor.service';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
+import { StudioService } from 'src/app/core/api-services/studio.service';
+import { Actor } from 'src/app/core/models/movies/actor.model';
 import { Movie } from 'src/app/core/models/movies/movie.model';
+import { Studio } from 'src/app/core/models/movies/studio.model';
 
 @Component({
   selector: 'app-movie-detail',
@@ -10,40 +15,74 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
 })
 export class MovieDetailComponent implements OnInit {
 
-  constructor(private readonly route: ActivatedRoute, private moviesService: MoviesService) { }
+  constructor(
+    private readonly route: ActivatedRoute,
+    private moviesService: MoviesService,
+    private actorService: ActorService,
+    private studioService: StudioService,
+    private router: Router) { }
   private movieId: any;
+  public error = false;
+  public errorMessage = '';
+  private actorsList = [];
+  public selectedStudio: Studio;
+  public movie: Movie;
+  private readonly subscriptions: Array<Subscription> = [];
   ngOnInit(): void {
     this.movieId = this.route.snapshot.paramMap.get('id');
     this.getMovie();
-    const movieMocked = {
-      "title": "Dancing Lady",
-      "poster": "http://dummyimage.com/400x600.png/cc0000/ffffff",
-      "genre": ["Comedy", "Musical", "Drama"],
-      "year": 2006,
-      "duration": 161,
-      "imdbRating": 8.27,
-      "actors": [4, 5, 6]
-    };
-    // this.updateMovie(movieMocked);
   }
 
   private getMovie() {
     if (this.movieId) {
-      this.moviesService.getMovieById(this.movieId).subscribe((movie: Movie) => {
-        console.log(movie);
+      this.subscriptions.push(
+        this.moviesService.getMovieById(this.movieId).subscribe((movie: Movie) => {
+          this.movie = movie;
+          this.loadActors();
+          this.loadStudio();
+        }, error => {
+          this.error = true;
+          this.errorMessage = 'ERROR.PUT_MOVIE_SERVICE'
+        })
+      );
+    }
+
+  }
+  public editMovie() {
+    this.router.navigate(['/movies/edit/' + this.movieId]);
+  }
+  public deleteMovie() {
+    this.subscriptions.push(
+      this.moviesService.deleteMovie(this.movieId).subscribe(result => {
+        this.router.navigate(['/movies'])
+      }, error=> {
+        this.error = true;
+        this.errorMessage = "ERROR.REMOVE_MOVIE_SERVICE";
       })
+    );
+  }
+  ngOnDestroy() {
+    for (const subs of this.subscriptions) {
+      subs.unsubscribe();
     }
   }
-  private updateMovie(movie: Movie) {
-    if (this.movieId) {
-      this.moviesService.putMovie(movie, this.movieId).subscribe(movieUpdate => {
-        console.log(movieUpdate);
+  private loadActors() {
+    this.subscriptions.push(
+      this.actorService.getActorList().subscribe((actors: Array<Actor>) => {
+        this.actorsList = actors;
       })
+    );
+  }
+  public getActorById(id: number): Actor {
+    if (this.actorsList) {
+      return this.actorsList.find(a => a.id === id) ? this.actorsList.find(a => a.id === id) : undefined;
     }
   }
-  private deleteMovie(movieId: number) {
-    this.moviesService.deleteMovie(movieId).subscribe(result =>  {
-      console.log('delete result:', result);
-    });
+  private loadStudio() {
+    this.subscriptions.push(
+      this.studioService.getStudioList().subscribe((studios: Array<Studio>) => {
+        this.selectedStudio = studios.find(s => s.movies.includes(+this.movieId));
+      })
+    );
   }
 }

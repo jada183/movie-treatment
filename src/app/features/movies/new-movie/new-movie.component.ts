@@ -6,7 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActorService } from 'src/app/core/api-services/actor.service';
 import { Actor } from 'src/app/core/models/movies/actor.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { StudioService } from 'src/app/core/api-services/studio.service';
 import { Studio } from 'src/app/core/models/movies/studio.model';
@@ -39,8 +39,11 @@ export class NewMovieComponent implements OnInit, OnDestroy {
 
   public errorMessage = '';
   public error = false;
+  private movieId:any;
+
   constructor(
     private moviesService: MoviesService,
+    private route: ActivatedRoute,
     private actorService: ActorService,
     private router: Router,
     private studioService: StudioService,
@@ -48,9 +51,10 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     private movieFormStore: MovieFormStore) { }
 
   ngOnInit(): void {
-    this.movieForm.valueChanges.subscribe(() => {
-      this.saveFormInAkita();
-    });
+    this.movieId = this.route.snapshot.paramMap.get('id');
+    if (!this.movieId) {
+      this.updateFormStore();
+    }
     this.subscriptions.push(
       forkJoin([this.actorService.getActorList(), this.studioService.getStudioList()]).subscribe((value: [Array<Actor>, Array<Studio>]) => {
         const [actorList, studioList] = value;
@@ -60,7 +64,11 @@ export class NewMovieComponent implements OnInit, OnDestroy {
       })
     );
   }
-
+  private updateFormStore() {
+    this.movieForm.valueChanges.subscribe(() => {
+      this.saveFormInAkita();
+    });
+  }
   private addMovie() {
     const newMovie = this.buildMovie();
     this.subscriptions.push(
@@ -73,7 +81,12 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     );
   }
   public onSubmit() {
-    this.addMovie();
+    if(!this.movieId) {
+      this.addMovie();
+    } else {
+      this.updateMovie();
+    }
+    
   }
   public removeGender(gender: any): void {
     const index = this.genders.indexOf(gender);
@@ -123,10 +136,14 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     return movie;
   }
   public resetForm() {
-    this.movieFormStore.resetMovieForm();
-    this.movieForm.reset();
-    this.actors = [];
-    this.genders = [];
+    if(!this.movieId) {
+      this.movieFormStore.resetMovieForm();
+      this.movieForm.reset();
+      this.actors = [];
+      this.genders = [];
+    } else {
+      this.router.navigate(['movies/detail/' + this.movieId])
+    }
   }
   public updateStudioInfo(movieId: number) {
     const selectedStudio = this.movieForm.get('studio').value;
@@ -150,15 +167,24 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     this.movieFormStore.setMovieForm(this.movieForm.value);
   }
   private recoverForm() {
-    this.subscriptions.push(
-      this.movieFormQuery.getMovieForm$.pipe(first()
-       ).subscribe(result => {
-        this.movieForm.setValue(result);
+    if(this.movieId) {
+      this.moviesService.getMovieById(this.movieId).subscribe(movie => {
+        this.fillForm(movie);
         this.loadActorsChips();
         this.setStudio();
         this.setGenreList();
-      })
-    );
+      });
+    } else {
+      this.subscriptions.push(
+        this.movieFormQuery.getMovieForm$.pipe(first()
+         ).subscribe(result => {
+          this.movieForm.setValue(result);
+          this.loadActorsChips();
+          this.setStudio();
+          this.setGenreList();
+        })
+      );
+    }
   }
   private loadActorsChips() {
     const movieActorIds: [] = this.movieForm.get('actors').value;
@@ -182,5 +208,23 @@ export class NewMovieComponent implements OnInit, OnDestroy {
     if(this.movieForm.get('genre').value) {
       this.genders = [...this.movieForm.get('genre').value];
     }
+  }
+  private updateMovie() {
+    const movie = this.buildMovie();
+    this.subscriptions.push(
+      this.moviesService.putMovie(movie, this.movieId).subscribe(movieUpdate => {
+      })
+    );
+  }
+  private fillForm(movie: Movie) {
+    const studio = this.studios.find(st => st.movies.includes(+this.movieId))
+    this.movieForm.get('studio').setValue(studio);
+    this.movieForm.get('title').setValue(movie.title);
+    this.movieForm.get('poster').setValue(movie.poster);
+    this.movieForm.get('year').setValue(movie.year);
+    this.movieForm.get('duration').setValue(movie.duration);
+    this.movieForm.get('imdbRating').setValue(movie.imdbRating);
+    this.movieForm.get('actors').setValue(movie.actors);
+    this.movieForm.get('genre').setValue(movie.genre);
   }
 } 
