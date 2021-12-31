@@ -40,9 +40,9 @@
             <div class="border-bottom-divider">
                 <span class="session-title ">{{ 'MOVIE_DETAIL.STUDIO' | translate}}</span>
             </div>
-            <div>
+            <div *ngIf="selectedStudio">
                 <span>
-                    <!--TODO ADD STUDIO NAME-->
+                    {{selectedStudio.name}}
                 </span>
             </div>
 
