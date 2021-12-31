@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ActorService } from 'src/app/core/api-services/actor.service';
@@ -13,7 +13,7 @@ import { Studio } from 'src/app/core/models/movies/studio.model';
   templateUrl: './movie-detail.component.html',
   styleUrls: ['./movie-detail.component.scss']
 })
-export class MovieDetailComponent implements OnInit {
+export class MovieDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly route: ActivatedRoute,
