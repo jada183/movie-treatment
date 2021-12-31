@@ -9,14 +9,17 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
   styleUrls: ['./movies-list.component.scss']
 })
 export class MoviesListComponent implements OnInit {
-
+  private page = 1;
+  private limit = 5;
   constructor(private moviesService: MoviesService, private router: Router) { }
   public error = false;
   public errorMessage = 'ERROR.MOVIE_LIST_SERVICE';
   public movieList = Array<Movie>();
+  public showMoreMoviesButton = true;
   ngOnInit(): void {
-    this.moviesService.getMoviesList().subscribe((movies: Array<Movie>) => {
+    this.moviesService.getMoviesList(this.page, this.limit).subscribe((movies: Array<Movie>) => {
       this.movieList = movies;
+      this.getNextList();
     }, error => {
       this.error = true;
     });
@@ -26,5 +29,24 @@ export class MoviesListComponent implements OnInit {
   }
   public openMovieDetail(movie: Movie) {
     this.router.navigate(['movies/detail/'+ movie.id])
+  }
+  public recoverMoviesToList() {
+    this.page++;
+    this.moviesService.getMoviesList(this.page, this.limit).subscribe((movies: Array<Movie>) => {
+      let movieListUpdate = this.movieList.concat(movies);
+      this.movieList = movieListUpdate;
+      this.getNextList();
+    });
+  }
+
+  private getNextList() {
+    let nextPage = this.page + 1;
+    this.moviesService.getMoviesList(nextPage, this.limit).subscribe((movies: Array<Movie>) => {
+      if(movies.length === 0) {
+        this.showMoreMoviesButton = false;
+      }
+    }, error => {
+      this.showMoreMoviesButton = false;
+    });
   }
 }

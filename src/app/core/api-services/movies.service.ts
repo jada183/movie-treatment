@@ -12,14 +12,19 @@ export class MoviesService {
   constructor(private readonly linkService: LinkerService) { }
   private moviesListUrl = 'movies';
 
-  public getMoviesList(): Observable<any> {
+  public getMoviesList(page: number, limit:number): Observable<any> {
+    let params: any = {
+      _page: page,
+      _limit: limit,
+    }
     const service = this.moviesListUrl;
     const genericRequest = new GenericRequest(
       Object.assign(
         service,
         {}),
       {},
-      {}
+      {},
+      params
     );
     return this.linkService.getModel(genericRequest)
   }

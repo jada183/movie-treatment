@@ -3,8 +3,11 @@
         <div *ngFor="let movie of movieList" class="mb-3">
             <app-movie-box [movie]="movie" (click)="openMovieDetail(movie)"></app-movie-box>
         </div>
- 
+        <div class="text-center">
+           <span class="show-more-button" (click)="recoverMoviesToList()" *ngIf="showMoreMoviesButton">{{ 'MOVIE_LIST.SHOW_MORE' | translate}}</span>
+        </div>
     </div>
+  
     <div class="stiky-button-container">
         <button mat-fab color="primary" class="mr-3" (click)="addMovie()">
             <mat-icon>add</mat-icon>

@@ -39,5 +39,8 @@
             "RATING_LIMITS": "La puntuación ha de estar entre 0 y 10",
             "POST_PATTERN": "El formato debe ser URL"
         }
+    },
+    "MOVIE_LIST": {
+        "SHOW_MORE": "Ver más"
     }
 }
