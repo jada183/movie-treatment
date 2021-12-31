@@ -1,0 +1,14 @@
+.image {
+    height: 500px;
+}
+@media (max-width: 768px) {
+    .image {
+        height: 300px;
+    }
+}
+.session-title {
+    font-size: 18px;
+}
+.border-bottom-divider {
+    border-bottom: 2px solid black;
+}

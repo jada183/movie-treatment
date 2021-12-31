@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin, Subscription } from 'rxjs';
+import { ActorService } from 'src/app/core/api-services/actor.service';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
+import { Actor } from 'src/app/core/models/movies/actor.model';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 
 @Component({
@@ -10,28 +13,27 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
 })
 export class MovieDetailComponent implements OnInit {
 
-  constructor(private readonly route: ActivatedRoute, private moviesService: MoviesService) { }
+  constructor(private readonly route: ActivatedRoute, private moviesService: MoviesService, private  actorService: ActorService) { }
   private movieId: any;
+  public error = false;
+  public errorMessage = '';
+  private actorsList = [];
+  public movie: Movie;
+  private readonly subscriptions: Array<Subscription> = [];
   ngOnInit(): void {
     this.movieId = this.route.snapshot.paramMap.get('id');
     this.getMovie();
-    const movieMocked = {
-      "title": "Dancing Lady",
-      "poster": "http://dummyimage.com/400x600.png/cc0000/ffffff",
-      "genre": ["Comedy", "Musical", "Drama"],
-      "year": 2006,
-      "duration": 161,
-      "imdbRating": 8.27,
-      "actors": [4, 5, 6]
-    };
-    // this.updateMovie(movieMocked);
   }
 
   private getMovie() {
     if (this.movieId) {
       this.moviesService.getMovieById(this.movieId).subscribe((movie: Movie) => {
-        console.log(movie);
-      })
+        this.movie = movie;
+        this.loadActors();
+      }, error => {
+        this.error = true;
+        this.errorMessage = 'ERROR.PUT_MOVIE_SERVICE'
+      });
     }
   }
   private updateMovie(movie: Movie) {
@@ -45,5 +47,21 @@ export class MovieDetailComponent implements OnInit {
     this.moviesService.deleteMovie(movieId).subscribe(result =>  {
       console.log('delete result:', result);
     });
+  }
+  ngOnDestroy() {
+    for (const subs of this.subscriptions) {
+      subs.unsubscribe();
+    }
+  }
+  private loadActors() {
+    this.actorService.getActorList().subscribe( (actors:Array<Actor>) => {
+      console.log('actors:', actors);
+      this.actorsList = actors;
+    })
+  }
+  public getActorById(id: number): Actor {
+    if(this.actorsList) {
+      return this.actorsList.find(a => a.id === id)? this.actorsList.find(a => a.id === id) : undefined;
+    }
   }
 }
