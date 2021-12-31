@@ -1,0 +1,19 @@
+.movie-box-container {
+    border:1px solid lightgray;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.movie-box-container :hover {
+    background-color: #E7E7E7;
+}
+.movie-box-content {
+    padding: 2em;
+}
+.image {
+    height: 600px;
+}
+@media (max-width: 768px) {
+    .image {
+        height: 400px;
+    }
+}

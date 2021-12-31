@@ -1,0 +1,16 @@
+<div class="movie-box-container w-100">
+    <div class="movie-box-content">
+        <div class="text-left">
+            <h5>{{ movie.title }}</h5>
+        </div>
+        <div class="mb-1">
+            <img [src]="movie.poster" width="100%"class="image"/>
+        </div>
+        <div class="row">
+            <div *ngFor="let genre of movie.genre" class="col-auto">
+               <b> #{{ genre }}</b> 
+            </div>
+        </div>
+    </div>
+
+</div>

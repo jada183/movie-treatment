@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 
@@ -8,16 +9,44 @@ import { Movie } from 'src/app/core/models/movies/movie.model';
   styleUrls: ['./movies-list.component.scss']
 })
 export class MoviesListComponent implements OnInit {
-
-  constructor(private moviesService: MoviesService) { }
+  private page = 1;
+  private limit = 5;
+  constructor(private moviesService: MoviesService, private router: Router) { }
   public error = false;
   public errorMessage = 'ERROR.MOVIE_LIST_SERVICE';
+  public movieList = Array<Movie>();
+  public showMoreMoviesButton = true;
   ngOnInit(): void {
-    this.moviesService.getMoviesList().subscribe((movies: Array<Movie>) => {
-      console.log(movies);
+    this.moviesService.getMoviesList(this.page, this.limit).subscribe((movies: Array<Movie>) => {
+      this.movieList = movies;
+      this.getNextList();
     }, error => {
       this.error = true;
     });
   }
+  public addMovie() {
+    this.router.navigate(['movies/new'])
+  }
+  public openMovieDetail(movie: Movie) {
+    this.router.navigate(['movies/detail/'+ movie.id])
+  }
+  public recoverMoviesToList() {
+    this.page++;
+    this.moviesService.getMoviesList(this.page, this.limit).subscribe((movies: Array<Movie>) => {
+      let movieListUpdate = this.movieList.concat(movies);
+      this.movieList = movieListUpdate;
+      this.getNextList();
+    });
+  }
 
+  private getNextList() {
+    let nextPage = this.page + 1;
+    this.moviesService.getMoviesList(nextPage, this.limit).subscribe((movies: Array<Movie>) => {
+      if(movies.length === 0) {
+        this.showMoreMoviesButton = false;
+      }
+    }, error => {
+      this.showMoreMoviesButton = false;
+    });
+  }
 }

@@ -11,10 +11,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
+import { MovieBoxComponent } from './components/movie-box/movie-box.component';
 @NgModule({
   declarations: [
     HeaderComponent,
-    ErrorComponent
+    ErrorComponent,
+    MovieBoxComponent
   ],
   imports: [
     CommonModule,
@@ -30,6 +32,7 @@ import { MatChipsModule } from '@angular/material/chips';
   exports: [
     HeaderComponent,
     ErrorComponent,
+    MovieBoxComponent,
     ReactiveFormsModule,
     MatInputModule,
     TranslateModule,

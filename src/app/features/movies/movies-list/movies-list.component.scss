@@ -1,0 +1,16 @@
+.stiky-button-container {
+    position: sticky;
+    width: 100%;
+    bottom: 10px;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+.show-more-button {
+    font-size: 18px;
+  
+}
+.show-more-button:hover {
+    cursor: pointer;
+    color: darkblue;
+}
