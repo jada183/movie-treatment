@@ -1,7 +1,7 @@
 <div *ngIf="!error">
     <div class="container mt-5">
         <div *ngFor="let movie of movieList" class="mb-3">
-            <app-movie-box [movie]="movie"></app-movie-box>
+            <app-movie-box [movie]="movie" (click)="openMovieDetail(movie)"></app-movie-box>
         </div>
  
     </div>

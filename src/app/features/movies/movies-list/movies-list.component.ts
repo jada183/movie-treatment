@@ -24,4 +24,7 @@ export class MoviesListComponent implements OnInit {
   public addMovie() {
     this.router.navigate(['movies/new'])
   }
+  public openMovieDetail(movie: Movie) {
+    this.router.navigate(['movies/detail/'+ movie.id])
+  }
 }
