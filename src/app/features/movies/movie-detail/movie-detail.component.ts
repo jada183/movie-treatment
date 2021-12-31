@@ -48,13 +48,8 @@ export class MovieDetailComponent implements OnInit {
     }
 
   }
-  private updateMovie(movie: Movie) {
-    if (this.movieId) {
-      this.subscriptions.push(
-        this.moviesService.putMovie(movie, this.movieId).subscribe(movieUpdate => {
-        })
-      );
-    }
+  public editMovie() {
+    this.router.navigate(['/movies/edit/' + this.movieId]);
   }
   public deleteMovie() {
     this.subscriptions.push(
