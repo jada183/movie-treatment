@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subscription } from 'rxjs';
 import { ActorService } from 'src/app/core/api-services/actor.service';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
@@ -19,7 +19,8 @@ export class MovieDetailComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private moviesService: MoviesService,
     private actorService: ActorService,
-    private studioService: StudioService) { }
+    private studioService: StudioService,
+    private router: Router) { }
   private movieId: any;
   public error = false;
   public errorMessage = '';
@@ -51,15 +52,14 @@ export class MovieDetailComponent implements OnInit {
     if (this.movieId) {
       this.subscriptions.push(
         this.moviesService.putMovie(movie, this.movieId).subscribe(movieUpdate => {
-          console.log(movieUpdate);
         })
       );
     }
   }
-  private deleteMovie(movieId: number) {
+  public deleteMovie() {
     this.subscriptions.push(
-      this.moviesService.deleteMovie(movieId).subscribe(result => {
-        console.log('delete result:', result);
+      this.moviesService.deleteMovie(this.movieId).subscribe(result => {
+        this.router.navigate(['/movies'])
       })
     );
   }

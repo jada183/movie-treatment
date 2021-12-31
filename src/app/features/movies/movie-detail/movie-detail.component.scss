@@ -12,3 +12,11 @@
 .border-bottom-divider {
     border-bottom: 2px solid black;
 }
+.stiky-button-container {
+    position: sticky;
+    width: 100%;
+    bottom: 10px;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+}
