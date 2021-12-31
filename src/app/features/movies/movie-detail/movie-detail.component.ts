@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ActorService } from 'src/app/core/api-services/actor.service';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
 import { StudioService } from 'src/app/core/api-services/studio.service';
@@ -55,6 +55,9 @@ export class MovieDetailComponent implements OnInit {
     this.subscriptions.push(
       this.moviesService.deleteMovie(this.movieId).subscribe(result => {
         this.router.navigate(['/movies'])
+      }, error=> {
+        this.error = true;
+        this.errorMessage = "ERROR.REMOVE_MOVIE_SERVICE";
       })
     );
   }
