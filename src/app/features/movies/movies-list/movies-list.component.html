@@ -5,6 +5,11 @@
         </div>
  
     </div>
+    <div class="stiky-button-container">
+        <button mat-fab color="primary" class="mr-3" (click)="addMovie()">
+            <mat-icon>add</mat-icon>
+          </button>
+    </div>
 </div>
 <div class="error-container" *ngIf="error">
     <app-error [message]="errorMessage"></app-error>
