@@ -25,7 +25,7 @@ export class MovieDetailComponent implements OnInit {
   public error = false;
   public errorMessage = '';
   private actorsList = [];
-  private selectedStudio: Studio;
+  public selectedStudio: Studio;
   public movie: Movie;
   private readonly subscriptions: Array<Subscription> = [];
   ngOnInit(): void {
