@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { MoviesService } from 'src/app/core/api-services/movies.service';
-import { of } from 'rxjs'
+import { of, throwError } from 'rxjs'
 import { NewMovieComponent } from './new-movie.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Movie } from 'src/app/core/models/movies/movie.model';
@@ -180,10 +180,38 @@ describe('NewMovieComponent', () => {
       (component as any).addMovie();
       expect(spyUpdateStudioInfo).toHaveBeenCalled();
     });
+    it('addMovie', () => {
+      const moviesServiceStub = fixture.debugElement.injector.get<MoviesService>(
+        MoviesService as any
+      );
+      spyOn(moviesServiceStub, 'postMovie').and.returnValue(throwError('error'));
+      (component as any).addMovie();
+      expect(component.error).toBeTruthy();
+    });
     it('onSubmit', () => {
       const spyAddMovie = spyOn((component as any), 'addMovie');
       component.onSubmit();
       expect(spyAddMovie).toHaveBeenCalled();
+    });
+    it('removeGender', () => {
+      component.genders = [
+        'accion'
+      ]
+      component.removeGender('accion');
+      expect(component.genders.length).toEqual(0);
+    });
+    it('removeGender case not found gender', () => {
+      component.genders = [
+        'a'
+      ]
+      component.removeGender('accion');
+      expect(component.genders.length).toEqual(1);
+    });
+    it('addGender', () => {
+      component.genders = [];
+      // TODO get a htmlInputElement 
+      component.addGender({input: undefined, value: 'accion'});
+      expect(component.genders.length).toEqual(1);
     });
   })
 });
