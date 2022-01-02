@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MovieBoxComponent } from './movie-box.component';
 
-describe('MovieBoxComponent', () => {
+xdescribe('MovieBoxComponent', () => {
   let component: MovieBoxComponent;
   let fixture: ComponentFixture<MovieBoxComponent>;
 

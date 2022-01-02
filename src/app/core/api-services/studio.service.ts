@@ -23,14 +23,14 @@ export class StudioService {
     );
     return this.linkService.getModel(genericRequest)
   }
-  public putStudio(movie: Studio, movieId: number) {
-    const service = this.studioListUrl + '/' + movieId;
+  public putStudio(studio: Studio, studioId: number) {
+    const service = this.studioListUrl + '/' + studioId;
     const genericRequest = new GenericRequest(
       Object.assign(
         service,
         {}),
       {},
-      movie
+      studio
     );
     return this.linkService.putModel(genericRequest)
   }
