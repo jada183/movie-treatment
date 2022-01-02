@@ -160,6 +160,15 @@ describe('NewMovieComponent', () => {
       component.onSubmit();
       expect(spyUpdateMovie).toHaveBeenCalled();
     });
+    it('resetForm', () => {
+      component.ngOnInit();
+      component.resetForm();
+      expect(component).toBeTruthy();
+    });
+    it('updateMovie', () => {
+      (component as any).updateMovie();
+      expect(component).toBeTruthy();
+    });
   });
   describe('without urlparams', () => {
     beforeEach(() => {
@@ -213,5 +222,135 @@ describe('NewMovieComponent', () => {
       component.addGender({input: undefined, value: 'accion'});
       expect(component.genders.length).toEqual(1);
     });
+    it('removeActor', () => {
+      const mockActorToRemove = {
+        "id": 1,
+        "first_name": "Isaak",
+        "last_name": "McQuode",
+        "gender": "Male",
+        "bornCity": "Ciduren",
+        "birthdate": "24/12/1957",
+        "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+        "rating": 2.03,
+        "movies": [
+          3,
+          7
+        ]
+      }
+      component.actors = [mockActorToRemove];
+      // TODO get a htmlInputElement 
+      component.removeActor(mockActorToRemove);
+      expect(component.actors.length).toEqual(0);
+    });
+    it('removeActor case not found', () => {
+      const mockActorToRemove = {
+        "id": 2,
+        "first_name": "Isaak",
+        "last_name": "McQuode",
+        "gender": "Male",
+        "bornCity": "Ciduren",
+        "birthdate": "24/12/1957",
+        "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+        "rating": 2.03,
+        "movies": [
+          3,
+          7
+        ]
+      }
+      component.actors = [{
+        "id": 1,
+        "first_name": "Isaak",
+        "last_name": "McQuode",
+        "gender": "Male",
+        "bornCity": "Ciduren",
+        "birthdate": "24/12/1957",
+        "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+        "rating": 2.03,
+        "movies": [
+          3,
+          7
+        ]
+      }];
+      // TODO get a htmlInputElement 
+      component.removeActor(mockActorToRemove);
+      expect(component.actors.length).toEqual(1);
+    });
+    it('addActor', () => {
+      component.actors = [{
+        "id": 1,
+        "first_name": "Isaak",
+        "last_name": "McQuode",
+        "gender": "Male",
+        "bornCity": "Ciduren",
+        "birthdate": "24/12/1957",
+        "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+        "rating": 2.03,
+        "movies": [
+          3,
+          7
+        ]
+        
+      }];
+      component.addActor({
+        "id": 2,
+        "first_name": "Isaak",
+        "last_name": "McQuode",
+        "gender": "Male",
+        "bornCity": "Ciduren",
+        "birthdate": "24/12/1957",
+        "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+        "rating": 2.03,
+        "movies": [
+          3,
+          7
+        ]
+        
+      });
+      expect(component.actors.length).toEqual(2);
+    });
+    it('resetForm', () => {
+      component.resetForm();
+      expect(component.genders.length).toEqual(0);
+    });
+    it('updateStudioInfo', () => {
+      component.movieForm.get('studio').setValue({
+        movies: []
+      });
+      component.updateStudioInfo(1);
+      expect(component.genders.length).toEqual(0);
+    });
+    it('updateStudioInfo', () => {
+      const moviesServiceStub = fixture.debugElement.injector.get<StudioService>(
+        StudioService as any
+      );
+      spyOn(moviesServiceStub, 'putStudio').and.returnValue(throwError('error'));
+      component.movieForm.get('studio').setValue({
+        movies: []
+      });
+      component.updateStudioInfo(1);
+      expect(component.error).toBeTruthy;
+    });
+    it('loadActorsChips', () => {
+      component.actors = [];
+      component.actorList = [
+        {
+          "id": 1,
+          "first_name": "Isaak",
+          "last_name": "McQuode",
+          "gender": "Male",
+          "bornCity": "Ciduren",
+          "birthdate": "24/12/1957",
+          "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+          "rating": 2.03,
+          "movies": [
+            3,
+            7
+          ]
+        }
+      ]
+      component.movieForm.get('actors').setValue([1]);
+      (component as any).loadActorsChips();
+      expect(component.actors.length).toEqual(1);
+    })
   })
 });
