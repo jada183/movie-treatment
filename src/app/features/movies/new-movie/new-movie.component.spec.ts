@@ -8,6 +8,7 @@ import { NewMovieComponent } from './new-movie.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Movie } from 'src/app/core/models/movies/movie.model';
 import { StudioService } from 'src/app/core/api-services/studio.service';
+import { ActorService } from 'src/app/core/api-services/actor.service';
 class RouterMock {
   navigate() { }
 }
@@ -43,6 +44,24 @@ class movieServiceStub {
   }
   putMovie(movie: Movie,id: number) {
     return of(movieMock);
+  }
+}
+class actorServiceStub {
+  getActorList() {
+    return [{
+      "id": 1,
+      "first_name": "Isaak",
+      "last_name": "McQuode",
+      "gender": "Male",
+      "bornCity": "Ciduren",
+      "birthdate": "24/12/1957",
+      "img": "http://dummyimage.com/600x400.png/dddddd/000000",
+      "rating": 2.03,
+      "movies": [
+        3,
+        7
+      ]
+    }]
   }
 }
 class studioServiceStub {
@@ -92,7 +111,8 @@ describe('NewMovieComponent', () => {
         { provide: Router, useClass: RouterMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteMock },
         { provide: MoviesService, useClass: movieServiceStub },
-        { provide: StudioService, useClass: studioServiceStub }
+        { provide: StudioService, useClass: studioServiceStub },
+        { provide: ActorService, useClass: actorServiceStub}
       ]
     })
     fixture = TestBed.createComponent(NewMovieComponent);
@@ -101,5 +121,9 @@ describe('NewMovieComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('ngOnInit', () => {
+    component.ngOnInit();
+    expect((component  as any).movieId).toEqual(1);
   });
 });
